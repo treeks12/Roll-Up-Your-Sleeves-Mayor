@@ -19,6 +19,7 @@ namespace SC4Evolution.Core.Tests
                 TestLockedServicesDoNotAlert();
                 TestEnglishAdvisorReports();
                 TestEnglishIssueCoverage();
+                TestEnglishNonAlertBriefings();
                 TestGameplayDecisionLocalization();
                 TestSameDayAndSevenDayEscalation();
                 TestRecoveryAndReturningIssue();
@@ -31,7 +32,7 @@ namespace SC4Evolution.Core.Tests
                 TestSerializationRoundTripAndReload();
                 TestInvalidSerializationDoesNotReplaceState();
                 TestNewsHistoryBound();
-                Console.WriteLine("PASS: " + _assertions + " assertions across 18 advisor-engine scenarios.");
+                Console.WriteLine("PASS: " + _assertions + " assertions across 19 advisor-engine scenarios.");
                 Console.WriteLine("PASS: " + AdvisorAlertQueueTests.Run() + " assertions across 13 advisor-alert queue scenarios.");
                 return 0;
             }
@@ -301,6 +302,29 @@ namespace SC4Evolution.Core.Tests
                 recovered.ZonedBuildings = 100;
                 CabinetReport recovery = english.Evaluate(recovered);
                 Contains(recovery.News[recovery.News.Length - 1].Title, "Recovery:", "English recovery for issue " + i);
+            }
+        }
+
+        private static void TestEnglishNonAlertBriefings()
+        {
+            CitySnapshot[] samples = { Good(Date(2026, 3, 1)), Good(Date(2026, 3, 1)), Good(Date(2026, 3, 1)), Good(Date(2026, 3, 1)) };
+            samples[1].Population = 0;
+            samples[2].DataValid = false;
+            samples[3].ElementaryEducationAvailable = samples[3].HighSchoolEducationAvailable = false;
+            samples[3].UniversityEducationAvailable = samples[3].HealthServiceAvailable = false;
+            foreach (CitySnapshot city in samples)
+            {
+                city.English = true;
+                CabinetReport report = new AdvisorEngine().Evaluate(city);
+                foreach (AdvisorBriefing briefing in report.Briefings)
+                {
+                    // Advisor names intentionally retain their original spelling.
+                    string text = briefing.Department + " " + briefing.Title + " " + briefing.Message + " " + briefing.MetricText + " " + briefing.Detail;
+                    True(text.IndexOfAny("áàâãéêíóôõúçÁÀÂÃÉÊÍÓÔÕÚÇ".ToCharArray()) < 0,
+                        "English briefing contains no Portuguese accents: " + briefing.Advisor + ": " + text);
+                    True(text.IndexOf(" indisponível", StringComparison.OrdinalIgnoreCase) < 0,
+                        "English briefing is localized: " + briefing.Advisor);
+                }
             }
         }
 

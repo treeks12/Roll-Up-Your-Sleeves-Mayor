@@ -19,10 +19,10 @@ namespace SC4Evolution.Mod.UI
                     new uint[] { 0x21010, 0x21020, 0x21030 }, new string[] { "R$", "R$$", "R$$$" }),
                 new TooltipBinding(info.Find<UISlider>("CommercialDemand"),
                     new uint[] { 0x23110, 0x23120, 0x23130 },
-                    new string[] { "Serviços $", "Serviços $$", "Serviços $$$" }),
+                    new string[] { GameLanguage.Text("Serviços $", "Services $"), GameLanguage.Text("Serviços $$", "Services $$"), GameLanguage.Text("Serviços $$$", "Services $$$") }),
                 new TooltipBinding(info.Find<UISlider>("IndustryOfficeDemand"),
                     new uint[] { 0x23320, 0x23330, 0x24100, 0x24200, 0x24300, 0x24400 },
-                    new string[] { "Escritórios $$", "Escritórios $$$", "Agricultura", "Indústria suja", "Manufatura", "Alta tecnologia" })
+                    new string[] { GameLanguage.Text("Escritórios $$", "Offices $$"), GameLanguage.Text("Escritórios $$$", "Offices $$$"), GameLanguage.Text("Agricultura", "Agriculture"), GameLanguage.Text("Indústria suja", "Polluting industry"), GameLanguage.Text("Manufatura", "Manufacturing"), GameLanguage.Text("Alta tecnologia", "High tech") })
             };
         }
 
@@ -63,9 +63,9 @@ namespace SC4Evolution.Mod.UI
 
                 StringBuilder detail = new StringBuilder();
                 detail.Append(demand != null && demand.GameplayEnabled
-                    ? "\n\nDemanda por categoria" : "\n\nProjeção por categoria");
+                    ? GameLanguage.Text("\n\nDemanda por categoria", "\n\nDemand by category") : GameLanguage.Text("\n\nProjeção por categoria", "\n\nProjection by category"));
                 if (demand == null || !demand.Converged)
-                    detail.Append("\nSem projeção disponível.");
+                    detail.Append(GameLanguage.Text("\nSem projeção disponível.", "\nNo projection available."));
                 else
                 {
                     for (int i = 0; i < _keys.Length; i++)
@@ -75,7 +75,7 @@ namespace SC4Evolution.Mod.UI
                         detail.Append(demand.TryGetDemand(_keys[i], out value)
                             ? Math.Max(-1000, Math.Min(1000, value)).ToString("+0;-0;0", CultureInfo.CurrentCulture) : "—");
                     }
-                    detail.Append("\nÍndice −1000 a +1000. Valores positivos indicam procura por novas construções.");
+                    detail.Append(GameLanguage.Text("\nÍndice −1000 a +1000. Valores positivos indicam procura por novas construções.", "\nIndex −1000 to +1000. Positive values indicate demand for new buildings."));
                 }
 
                 _ownedBlock = detail.ToString();

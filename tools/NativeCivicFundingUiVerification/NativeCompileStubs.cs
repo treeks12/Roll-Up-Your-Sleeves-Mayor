@@ -34,7 +34,7 @@ namespace SC4Evolution.Mod.UI
   internal UIButton ReadNoticeButton{get{return null;}}internal UIPanel MessagePanel{get{return null;}}internal UITextureSprite MessagePortrait{get{return null;}}internal UIButton MessageCloseButton{get{return null;}}internal UIButton MessageActionButton{get{return null;}}
   internal AdvisorBriefing MessageBriefing{get{return null;}}internal bool MessageVisible{get{return false;}}internal int PendingAlerts{get{return 0;}}
   internal UIButton GetAdvisorButton(int index){return null;}internal UITextureSprite GetAdvisorAvatar(int index){return null;}internal bool ReadSelectedNotice(){return false;}
-  internal bool TryInstall(){return false;}internal void Refresh(bool force){}internal void Toggle(){}internal void Release(){}
+  internal bool TryInstall(){return false;}internal void Refresh(bool force){}internal void Animate(){}internal void Toggle(){}internal void Release(){}
  }
 }
 

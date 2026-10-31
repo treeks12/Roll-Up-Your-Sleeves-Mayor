@@ -38,3 +38,6 @@ namespace SC4Evolution.Mod.Civic {
  public bool Apply(CivicFundingSnapshot expected,int? e,int? c,out string reason){SIM();Applies++;reason="TechnicalFailure";if(Reject||!ReferenceEquals(Current,expected)||expected.CapacityOverridePercent!=E||expected.CoverageOverridePercent!=C)return false;E=e;C=c;return true;}}
 }
 namespace SC4Evolution.Mod.Runtime {public static class ModRuntime {public static SC4Evolution.Mod.Civic.CivicFundingBridge CurrentCivicFundingBridge;public static bool IsLoaded=true;}}
+
+namespace ColossalFramework { public static class SingletonLite<T> where T:new() { public static T instance = new T(); public static bool exists { get { return instance != null; } } } }
+namespace ColossalFramework.Globalization { public class LocaleManager { public string language = "pt-BR"; } }

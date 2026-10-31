@@ -6,7 +6,7 @@
 
 SC4Evolution é um mod experimental para **Cities: Skylines 1** inspirado na experiência de administrar uma cidade em **SimCity 4**. A ideia é combinar a construção e o mapa amplo do CS1 com assessores, informações municipais e decisões de desenvolvimento que lembrem o SC4. É um projeto de fãs independente, não afiliado às empresas dos jogos.
 
-**Estado: beta experimental, em desenvolvimento.** Não recria integralmente a simulação do SC4. A interface e os textos do mod estão em português brasileiro; a tradução da interface para inglês ainda precisa ser implementada.
+**Estado: beta experimental, em desenvolvimento.** Não recria integralmente a simulação do SC4. A interface e os textos dos assessores estão disponíveis em português brasileiro e inglês, conforme o idioma do jogo. Consulte [idioma e limitações](docs/LOCALIZATION.md).
 
 ### O que já existe
 
@@ -36,7 +36,7 @@ Ative SC4Evolution em Gerenciador de Conteúdo > Mods. O mod utiliza Cities Harm
 
 SC4Evolution is an experimental **Cities: Skylines 1** mod inspired by the city-management experience of **SimCity 4**. It aims to combine CS1's building tools and larger maps with SC4-like advisors, city information and development decisions. This is an independent fan project, unaffiliated with the games' companies.
 
-**Status: experimental beta, work in progress.** It does not yet reproduce the complete SC4 simulation. The in-game interface and messages are currently in Brazilian Portuguese; English in-game localization remains to be implemented.
+**Status: experimental beta, work in progress.** It does not yet reproduce the complete SC4 simulation. The interface and advisor messages support English and Brazilian Portuguese, following the game language. See [language behavior and limitations](docs/LOCALIZATION.md).
 
 ### Current features and limits
 

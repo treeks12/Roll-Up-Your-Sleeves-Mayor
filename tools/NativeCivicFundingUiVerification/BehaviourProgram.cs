@@ -22,6 +22,11 @@ class Program {
  f=new Fixture();f.View.Screen=new Vector2(600,600);f.UI.Refresh();f.Complete();Check(f.UI.Panel!=null&&!f.UI.Panel.isVisible,"no screen room hides");Check(f.Host.size.x==450&&f.Host.size.y==550,"no room preserves host");f.UI.Release();Check(f.Host.clipChildren,"no room cleanup");
  f=new Fixture();f.Host.autoLayout=true;f.UI.Refresh();f.Complete();Check(f.UI.Panel==null&&f.Host.clipChildren,"managed native layout untouched");
  f=new Fixture();f.Load();var dock=f.UI.Panel.parent;f.Host.RemoveUIComponent(dock);var alien=new UIPanel();alien.Children.Add(dock);dock.parent=alien;f.UI.Release();Check(!f.Host.clipChildren,"no ownership no clip restore");
+ SingletonLite<ColossalFramework.Globalization.LocaleManager>.instance.language="en";
+ f=new Fixture();f.Load();Check(f.UI.Panel.Find<UILabel>("SC4EvolutionCivicFundingTitle").text=="Local funding","English title follows game language");
+ Check(f.UI.Panel.Find<UILabel>("SC4EvolutionCivicFundingCapacityHeading").text=="Capacity","English capacity heading");
+ f.Bridge.Reject=true;f.UI.CapacityPlus.Click();f.Complete();Check(f.UI.Panel.Find<UILabel>("SC4EvolutionCivicFundingStatus").text.StartsWith("Change not applied"),"English rejected command");
+ SingletonLite<ColossalFramework.Globalization.LocaleManager>.instance.language="pt-BR";
  Console.WriteLine(checks+" UI ordering/cleanup assertions PASS (stub-only; no game runtime)");
  }
 }

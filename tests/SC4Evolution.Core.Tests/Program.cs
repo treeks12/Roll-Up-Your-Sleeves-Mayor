@@ -16,6 +16,7 @@ namespace SC4Evolution.Core.Tests
                 TestVerifiedPortugueseRosterNames();
                 TestThresholdsAndSafeFinanceMath();
                 TestLockedServicesDoNotAlert();
+                TestEnglishAdvisorReports();
                 TestSameDayAndSevenDayEscalation();
                 TestRecoveryAndReturningIssue();
                 TestZeroPopulationPreservesIssueHistory();
@@ -27,7 +28,7 @@ namespace SC4Evolution.Core.Tests
                 TestSerializationRoundTripAndReload();
                 TestInvalidSerializationDoesNotReplaceState();
                 TestNewsHistoryBound();
-                Console.WriteLine("PASS: " + _assertions + " assertions across 15 advisor-engine scenarios.");
+                Console.WriteLine("PASS: " + _assertions + " assertions across 16 advisor-engine scenarios.");
                 Console.WriteLine("PASS: " + AdvisorAlertQueueTests.Run() + " assertions across 13 advisor-alert queue scenarios.");
                 return 0;
             }
@@ -217,6 +218,34 @@ namespace SC4Evolution.Core.Tests
             Equal(IssueSeverity.None, EducationHealth(report).Severity, "a locked service suspends its old episode");
             True(EducationHealth(report).IsSuspended, "a locked service marks the briefing as suspended");
             Equal(1, report.News.Length, "locking a service does not add a recovery spam item");
+        }
+
+        private static void TestEnglishAdvisorReports()
+        {
+            AdvisorEngine engine = new AdvisorEngine();
+            CitySnapshot city = Good(Date(2026, 3, 1));
+            city.English = true;
+            city.Cash = -100;
+            city.UnemploymentPercent = 25;
+            city.ElementaryNeed = 100;
+            city.ElementaryCapacity = 0;
+            city.ElectricityUse = 100;
+            city.ElectricityCapacity = 0;
+            city.CrimePercent = 25;
+            city.PollutionPercent = 40;
+            city.TrafficFlowPercent = 34;
+            CabinetReport report = engine.Evaluate(city);
+            Contains(Finance(report).Title, "treasury", "English finance alert");
+            Contains(Urban(report).Message, "Unemployment", "English unemployment alert");
+            Contains(EducationHealth(report).Message, "elementary school", "English school alert");
+            Contains(Utilities(report).Message, "electricity", "English electricity alert");
+            Contains(Safety(report).Message, "Crime", "English safety alert");
+            Contains(Environment(report).Message, "Pollution", "English pollution alert");
+            Contains(Transport(report).Message, "traffic", "English traffic alert");
+            Contains(report.News[0].Title, "Alert:", "English news alert");
+            city.English = false;
+            report = engine.Evaluate(city);
+            Contains(EducationHealth(report).Message, "ensino fundamental", "Portuguese remains available after English");
         }
 
         private static void TestSameDayAndSevenDayEscalation()

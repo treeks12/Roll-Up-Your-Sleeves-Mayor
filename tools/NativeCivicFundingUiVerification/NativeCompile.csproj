@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
  <PropertyGroup><TargetFramework>net35</TargetFramework><LangVersion>7.3</LangVersion><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup>
  <ItemGroup>
-  <Compile Include="../../src/SC4Evolution.Mod/UI/NativeCivicFundingUI.cs" Link="NativeCivicFundingUI.cs"/>
+  <Compile Include="../../src/SC4Evolution.Mod/UI/GameLanguage.cs" Link="GameLanguage.cs"/><Compile Include="../../src/SC4Evolution.Mod/UI/NativeCivicFundingUI.cs" Link="NativeCivicFundingUI.cs"/>
   <Compile Include="../../src/SC4Evolution.Mod/UI/CabinetUI.cs" Link="CabinetUI.cs"/>
   <Compile Include="NativeCompileStubs.cs"/>
   <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net35" Version="1.0.3" PrivateAssets="all"/>

@@ -123,7 +123,7 @@ namespace SC4Evolution.Mod.UI
                         // Apply itself checks the opaque owner/session/identity and both old overrides.
                         if (command)
                         {
-                            if (expected == null || expected.BuildingId != building) reason = "A seleção mudou.";
+                            if (expected == null || expected.BuildingId != building) reason = Text("A seleção mudou.", "The selection changed.");
                             else applied = bridge.Apply(expected, capacity, coverage, out reason);
                         }
                         if (IsCurrent(bridge, building, epoch)) snapshot = bridge.GetSnapshot(building);
@@ -151,7 +151,7 @@ namespace SC4Evolution.Mod.UI
             _snapshot = result.Snapshot != null && result.Snapshot.BuildingId == result.Building ? result.Snapshot : null;
             _lastError = result.Snapshot == null || (result.Command && !result.Applied) ? result.Reason : null;
             _nextPoll = Time.realtimeSinceStartup + (_snapshot == null ? 2f : 1f);
-            if (result.Command) _feedback = result.Applied ? "Financiamento atualizado." : "Alteração não aplicada. Confira a seleção e tente novamente.";
+            if (result.Command) _feedback = result.Applied ? Text("Financiamento atualizado.", "Funding updated.") : Text("Alteração não aplicada. Confira a seleção e tente novamente.", "Change not applied. Check the selection and try again.");
         }
 
         private bool TryInstall()
@@ -182,20 +182,20 @@ namespace SC4Evolution.Mod.UI
                 _panel.clipChildren = true; _panel.isInteractive = true; _panel.canFocus = false;
                 _title = Label("Title", labelStyle); _title.textScale = Mathf.Max(_title.textScale, 0.95f);
                 _department = Label("Department", labelStyle);
-                _capacityHeading = Label("CapacityHeading", labelStyle); _capacityHeading.text = "Capacidade";
+                _capacityHeading = Label("CapacityHeading", labelStyle); _capacityHeading.text = Text("Capacidade", "Capacity");
                 _capacityValue = Label("CapacityValue", labelStyle); _capacityValue.verticalAlignment = UIVerticalAlignment.Middle; _capacityValue.textAlignment = UIHorizontalAlignment.Center;
-                _coverageHeading = Label("CoverageHeading", labelStyle); _coverageHeading.text = "Cobertura";
+                _coverageHeading = Label("CoverageHeading", labelStyle); _coverageHeading.text = Text("Cobertura", "Coverage");
                 _coverageValue = Label("CoverageValue", labelStyle); _coverageValue.verticalAlignment = UIVerticalAlignment.Middle; _coverageValue.textAlignment = UIHorizontalAlignment.Center;
                 _effects = Label("Effects", labelStyle); _status = Label("Status", labelStyle);
                 _capacityMinus = Button("CapacityMinus", "-", buttonStyle); _capacityMinus.eventClicked += CapacityDecrease;
                 _capacityPlus = Button("CapacityPlus", "+", buttonStyle); _capacityPlus.eventClicked += CapacityIncrease;
-                _capacityInherit = Button("CapacityInherit", "Herdar dep.", buttonStyle); _capacityInherit.eventClicked += CapacityReset;
+                _capacityInherit = Button("CapacityInherit", Text("Herdar dep.", "Use budget"), buttonStyle); _capacityInherit.eventClicked += CapacityReset;
                 _coverageMinus = Button("CoverageMinus", "-", buttonStyle); _coverageMinus.eventClicked += CoverageDecrease;
                 _coveragePlus = Button("CoveragePlus", "+", buttonStyle); _coveragePlus.eventClicked += CoverageIncrease;
-                _coverageInherit = Button("CoverageInherit", "Herdar dep.", buttonStyle); _coverageInherit.eventClicked += CoverageReset;
-                foreach (UIButton reset in new[] { _capacityInherit, _coverageInherit }) reset.tooltip = "Voltar ao orçamento do departamento apenas neste eixo.";
-                foreach (UIButton step in new[] { _capacityMinus, _capacityPlus, _coverageMinus, _coveragePlus }) step.tooltip = "Alterar o financiamento local em 5 pontos percentuais (0–120%).";
-                _capacityHeading.tooltip = _coverageHeading.tooltip = "Local: 0–120%. Herdar mantém o orçamento do departamento.";
+                _coverageInherit = Button("CoverageInherit", Text("Herdar dep.", "Use budget"), buttonStyle); _coverageInherit.eventClicked += CoverageReset;
+                foreach (UIButton reset in new[] { _capacityInherit, _coverageInherit }) reset.tooltip = Text("Voltar ao orçamento do departamento apenas neste eixo.", "Use the department budget for this setting.");
+                foreach (UIButton step in new[] { _capacityMinus, _capacityPlus, _coverageMinus, _coveragePlus }) step.tooltip = Text("Alterar o financiamento local em 5 pontos percentuais (0–120%).", "Change local funding by 5 percentage points (0–120%).");
+                _capacityHeading.tooltip = _coverageHeading.tooltip = Text("Local: 0–120%. Herdar mantém o orçamento do departamento.", "Local: 0–120%. Use budget follows the department budget.");
                 if (_host.clipChildren) { _changedClipping = true; _host.clipChildren = false; }
                 _panel.isVisible = false;
                 return true;
@@ -207,23 +207,26 @@ namespace SC4Evolution.Mod.UI
         {
             if (_snapshot == null || !_snapshot.Supported || !TryLayout()) { Hide(); return; }
             CivicFundingSnapshot value = _snapshot;
-            _title.text = "Financiamento local";
-            _department.text = string.Format(CultureInfo.CurrentCulture, "Departamento: dia {0}% · noite {1}%", value.GlobalDayPercent, value.GlobalNightPercent);
-            _department.tooltip = string.Format(CultureInfo.CurrentCulture, "Departamento agora: {0}% · média nativa: {1}%", value.GlobalCurrentPercent, value.GlobalAveragePercent);
+            _title.text = Text("Financiamento local", "Local funding");
+            _department.text = string.Format(CultureInfo.CurrentCulture, Text("Departamento: dia {0}% · noite {1}%", "Department: day {0}% · night {1}%"), value.GlobalDayPercent, value.GlobalNightPercent);
+            _department.tooltip = string.Format(CultureInfo.CurrentCulture, Text("Departamento agora: {0}% · média nativa: {1}%", "Department now: {0}% · game average: {1}%"), value.GlobalCurrentPercent, value.GlobalAveragePercent);
             _capacityValue.text = Percent(value.CapacityOverridePercent, value.ResolvedCapacityPercent);
             _coverageValue.text = Percent(value.CoverageOverridePercent, value.ResolvedCoveragePercent);
-            _effects.text = string.Format(CultureInfo.CurrentCulture, "Capacidade alvo: {0:N0} · raio: {1:N0} m", value.BudgetTargetCapacity, value.CurrentRange);
-            if (value.LastEffectiveCapacity.HasValue) _effects.text += "\nÚltima capacidade observada: " + value.LastEffectiveCapacity.Value.ToString("N0", CultureInfo.CurrentCulture);
-            _effects.tooltip = "Os valores observados acompanham o próximo cálculo nativo do serviço.";
+            _effects.text = string.Format(CultureInfo.CurrentCulture, Text("Capacidade alvo: {0:N0} · raio: {1:N0} m", "Target capacity: {0:N0} · radius: {1:N0} m"), value.BudgetTargetCapacity, value.CurrentRange);
+            if (value.LastEffectiveCapacity.HasValue) _effects.text += Text("\nÚltima capacidade observada: ", "\nLast observed capacity: ") + value.LastEffectiveCapacity.Value.ToString("N0", CultureInfo.CurrentCulture);
+            _effects.tooltip = Text("Os valores observados acompanham o próximo cálculo nativo do serviço.", "Observed values update with the next service calculation.");
             // An unavailable backend is observational: do not present policy projections as active effects.
             bool controls = value.CanApply;
             foreach (UIComponent item in new UIComponent[] { _capacityHeading, _capacityValue, _capacityMinus, _capacityPlus, _capacityInherit,
                 _coverageHeading, _coverageValue, _coverageMinus, _coveragePlus, _coverageInherit, _effects }) item.isVisible = controls;
-            string text = !controls ? "Financiamento local indisponível nesta sessão." : _pending ? "Atualizando..." : _feedback ?? "Ajustes locais independentes; o departamento é preservado.";
+            string text = !controls ? Text("Financiamento local indisponível nesta sessão.", "Local funding is unavailable in this session.") : _pending ? Text("Atualizando...", "Updating...") : _feedback ?? Text("Ajustes locais independentes; o departamento é preservado.", "Local settings are independent of the department budget.");
             _status.text = text; _status.tooltip = text;
             UpdateButtons();
             _panel.isVisible = true;
         }
+
+        private static string Text(string portuguese, string english)
+        { return GameLanguage.Text(portuguese, english); }
 
         private static string Percent(int? local, int resolved)
         { return resolved.ToString(CultureInfo.CurrentCulture) + "%" + (local.HasValue ? string.Empty : " · dep."); }

@@ -163,9 +163,9 @@ namespace SC4Evolution.Mod.UI
                 _scrollbar.thumbObject = _thumb;
                 _text.verticalScrollbar = _scrollbar;
 
-                _close = Button("Close", "Fechar", buttonStyle);
+                _close = Button("Close", GameLanguage.Text("Fechar", "Close"), buttonStyle);
                 _close.eventClicked += CloseClicked;
-                _action = Button("Action", "Abrir visualização", buttonStyle);
+                _action = Button("Action", GameLanguage.Text("Abrir visualização", "Open view"), buttonStyle);
                 _action.eventClicked += ActionClicked;
             }
             catch
@@ -203,9 +203,9 @@ namespace SC4Evolution.Mod.UI
             _portrait.texture = borrowedPortrait;
             _portrait.isVisible = borrowedPortrait != null;
             _thoughtBubble.isVisible = current.Severity >= IssueSeverity.Notice && !current.IsSuspended;
-            _action.text = "Abrir " + ActionText(effectiveAction);
+            _action.text = GameLanguage.Text("Abrir ", "Open ") + ActionText(effectiveAction);
             _action.isEnabled = actionAvailable && onAction != null && Enum.IsDefined(typeof(AdvisorAction), effectiveAction);
-            _action.tooltip = _action.isEnabled ? string.Empty : "Visualização indisponível no momento.";
+            _action.tooltip = _action.isEnabled ? string.Empty : GameLanguage.Text("Visualização indisponível no momento.", "This view is not available right now.");
             _text.scrollPosition = Vector2.zero;
             _needsLayout = true;
             _panel.isVisible = true;
@@ -417,10 +417,10 @@ namespace SC4Evolution.Mod.UI
         {
             switch (mood)
             {
-                case AdvisorMood.Calm: return "Calmo";
-                case AdvisorMood.Concerned: return "Preocupado";
-                case AdvisorMood.Angry: return "Insatisfeito";
-                case AdvisorMood.Pleased: return "Satisfeito";
+                case AdvisorMood.Calm: return GameLanguage.Text("Calmo", "Calm");
+                case AdvisorMood.Concerned: return GameLanguage.Text("Preocupado", "Concerned");
+                case AdvisorMood.Angry: return GameLanguage.Text("Insatisfeito", "Unhappy");
+                case AdvisorMood.Pleased: return GameLanguage.Text("Satisfeito", "Pleased");
                 default: return string.Empty;
             }
         }
@@ -428,18 +428,18 @@ namespace SC4Evolution.Mod.UI
         {
             switch (action)
             {
-                case AdvisorAction.Overview: return "visão geral";
-                case AdvisorAction.Budget: return "orçamento";
-                case AdvisorAction.Education: return "educação";
-                case AdvisorAction.Health: return "saúde";
-                case AdvisorAction.Electricity: return "energia";
-                case AdvisorAction.Water: return "água e esgoto";
-                case AdvisorAction.Crime: return "segurança";
-                case AdvisorAction.Pollution: return "poluição";
-                case AdvisorAction.Traffic: return "trânsito";
-                case AdvisorAction.Zoning: return "zoneamento";
-                case AdvisorAction.Garbage: return "lixo";
-                default: return "visualização";
+                case AdvisorAction.Overview: return GameLanguage.Text("visão geral", "overview");
+                case AdvisorAction.Budget: return GameLanguage.Text("orçamento", "budget");
+                case AdvisorAction.Education: return GameLanguage.Text("educação", "education");
+                case AdvisorAction.Health: return GameLanguage.Text("saúde", "health");
+                case AdvisorAction.Electricity: return GameLanguage.Text("energia", "electricity");
+                case AdvisorAction.Water: return GameLanguage.Text("água e esgoto", "water and sewage");
+                case AdvisorAction.Crime: return GameLanguage.Text("segurança", "safety");
+                case AdvisorAction.Pollution: return GameLanguage.Text("poluição", "pollution");
+                case AdvisorAction.Traffic: return GameLanguage.Text("trânsito", "traffic");
+                case AdvisorAction.Zoning: return GameLanguage.Text("zoneamento", "zoning");
+                case AdvisorAction.Garbage: return GameLanguage.Text("lixo", "garbage");
+                default: return GameLanguage.Text("visualização", "view");
             }
         }
         private static bool Finite(float value) { return !float.IsNaN(value) && !float.IsInfinity(value); }

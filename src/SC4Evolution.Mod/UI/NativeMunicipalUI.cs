@@ -13,10 +13,10 @@ namespace SC4Evolution.Mod.UI
     /// <summary>A council extension of the vanilla city panel, with vanilla controls and navigation.</summary>
     internal sealed class NativeMunicipalUI
     {
-        private static readonly string[] Departments = new string[]
+        private readonly string[] Departments = new string[]
         {
-            "Finanças", "Urbanismo", "Educação e saúde", "Serviços urbanos",
-            "Segurança", "Meio ambiente", "Transportes"
+            GameLanguage.Text("Finanças", "Finance"), GameLanguage.Text("Urbanismo", "Urban planning"), GameLanguage.Text("Educação e saúde", "Education and health"), GameLanguage.Text("Serviços urbanos", "City services"),
+            GameLanguage.Text("Segurança", "Safety"), GameLanguage.Text("Meio ambiente", "Environment"), GameLanguage.Text("Transportes", "Transport")
         };
 
         private readonly UIView _view;
@@ -157,8 +157,8 @@ namespace SC4Evolution.Mod.UI
                 _changedClipping = true;
             }
 
-            _toggle = Button(_panel, "SC4EvolutionCouncilToggle", "Conselho municipal");
-            _toggle.tooltip = "Consultar os sete assessores da cidade";
+            _toggle = Button(_panel, "SC4EvolutionCouncilToggle", GameLanguage.Text("Conselho municipal", "City council"));
+            _toggle.tooltip = GameLanguage.Text("Consultar os sete assessores da cidade", "Consult the seven city advisors");
             _toggle.eventClicked += delegate { SetExpanded(!_expanded); };
 
             _body = _panel.AddUIComponent<UIScrollablePanel>();
@@ -194,7 +194,7 @@ namespace SC4Evolution.Mod.UI
             _portrait.material = _view.defaultAtlas.material;
             _portrait.isInteractive = false;
             _portrait.canFocus = false;
-            _portraitFallback = Label("SC4EvolutionCouncilPortraitFallback", "Assessor", false);
+            _portraitFallback = Label("SC4EvolutionCouncilPortraitFallback", GameLanguage.Text("Assessor", "Advisor"), false);
             _name = Label("SC4EvolutionCouncilName", string.Empty, true);
             _department = Label("SC4EvolutionCouncilDepartment", string.Empty, true);
             _mood = Label("SC4EvolutionCouncilMood", string.Empty, true);
@@ -202,12 +202,12 @@ namespace SC4Evolution.Mod.UI
             _metric = Label("SC4EvolutionCouncilMetric", string.Empty, true);
             _message = Label("SC4EvolutionCouncilMessage", string.Empty, true);
             _message.isInteractive = true;
-            _readNotice = Button(_body, "SC4EvolutionCouncilReadNotice", "Ler aviso");
+            _readNotice = Button(_body, "SC4EvolutionCouncilReadNotice", GameLanguage.Text("Ler aviso", "Read notice"));
             _readNotice.eventClicked += delegate { ReadSelectedNotice(); };
-            _action = Button(_body, "SC4EvolutionCouncilAction", "Abrir visualização");
+            _action = Button(_body, "SC4EvolutionCouncilAction", GameLanguage.Text("Abrir visualização", "Open view"));
             _action.eventClicked += delegate { OpenAction(); };
-            _newsHeading = Label("SC4EvolutionCouncilNewsHeading", "Últimos avisos", true);
-            _newsEmpty = Label("SC4EvolutionCouncilNewsEmpty", "Nenhum aviso registrado.", true);
+            _newsHeading = Label("SC4EvolutionCouncilNewsHeading", GameLanguage.Text("Últimos avisos", "Recent notices"), true);
+            _newsEmpty = Label("SC4EvolutionCouncilNewsEmpty", GameLanguage.Text("Nenhum aviso registrado.", "No notices yet."), true);
             for (int i = 0; i < _newsTitles.Length; i++)
             {
                 _newsTitles[i] = Label("SC4EvolutionCouncilNewsTitle" + i, string.Empty, true);
@@ -525,7 +525,7 @@ namespace SC4Evolution.Mod.UI
                 Title = notice.Title,
                 Message = notice.Message,
                 MetricText = notice.IndicatorText ?? string.Empty,
-                Detail = string.IsNullOrEmpty(notice.TargetText) ? string.Empty : "Alvo: " + notice.TargetText,
+                Detail = string.IsNullOrEmpty(notice.TargetText) ? string.Empty : GameLanguage.Text("Alvo: ", "Target: ") + notice.TargetText,
                 Mood = mood,
                 Severity = severity,
                 Action = DecisionAction(notice.Advisor),
@@ -557,7 +557,7 @@ namespace SC4Evolution.Mod.UI
                 case AdvisorId.PublicSafety: return "Samuel Fogaça";
                 case AdvisorId.Environment: return "Camila Camomila";
                 case AdvisorId.Transport: return "Roberto Carros";
-                default: return string.IsNullOrEmpty(supplied) ? "Assessoria" : supplied;
+                default: return string.IsNullOrEmpty(supplied) ? GameLanguage.Text("Assessoria", "Advisor") : supplied;
             }
         }
 
@@ -565,14 +565,14 @@ namespace SC4Evolution.Mod.UI
         {
             switch (advisor)
             {
-                case AdvisorId.Finance: return "Finanças";
-                case AdvisorId.UrbanPlanning: return "Planejamento urbano";
-                case AdvisorId.EducationHealth: return "Educação e saúde";
-                case AdvisorId.Utilities: return "Serviços públicos";
-                case AdvisorId.PublicSafety: return "Segurança pública";
-                case AdvisorId.Environment: return "Meio ambiente";
-                case AdvisorId.Transport: return "Transportes";
-                default: return string.IsNullOrEmpty(supplied) ? "Gabinete" : supplied;
+                case AdvisorId.Finance: return GameLanguage.Text("Finanças", "Finance");
+                case AdvisorId.UrbanPlanning: return GameLanguage.Text("Planejamento urbano", "Urban planning");
+                case AdvisorId.EducationHealth: return GameLanguage.Text("Educação e saúde", "Education and health");
+                case AdvisorId.Utilities: return GameLanguage.Text("Serviços públicos", "Public services");
+                case AdvisorId.PublicSafety: return GameLanguage.Text("Segurança pública", "Public safety");
+                case AdvisorId.Environment: return GameLanguage.Text("Meio ambiente", "Environment");
+                case AdvisorId.Transport: return GameLanguage.Text("Transportes", "Transport");
+                default: return string.IsNullOrEmpty(supplied) ? GameLanguage.Text("Gabinete", "Council") : supplied;
             }
         }
 
@@ -617,12 +617,12 @@ namespace SC4Evolution.Mod.UI
             reason = string.Empty;
             if (!ModRuntime.IsLoaded || !Singleton<LoadingManager>.exists)
             {
-                reason = "Aguarde a cidade terminar de carregar.";
+                reason = GameLanguage.Text("Aguarde a cidade terminar de carregar.", "Wait for the city to finish loading.");
                 return true;
             }
             if (UIView.HasModalInput())
             {
-                reason = "Feche a janela de confirmação para ler o aviso.";
+                reason = GameLanguage.Text("Feche a janela de confirmação para ler o aviso.", "Close the confirmation dialog to read the notice.");
                 return true;
             }
             LoadingAnimation animation = Singleton<LoadingManager>.instance.LoadingAnimationComponent;
@@ -631,7 +631,7 @@ namespace SC4Evolution.Mod.UI
                 || (animation.enabled && animation.gameObject.activeInHierarchy)
                 || (camera.enabled && camera.gameObject.activeInHierarchy))
             {
-                reason = "Aguarde a cidade terminar de carregar.";
+                reason = GameLanguage.Text("Aguarde a cidade terminar de carregar.", "Wait for the city to finish loading.");
                 return true;
             }
             // Explicit player reading can coexist with a non-modal tutorial. Only unsolicited
@@ -658,7 +658,7 @@ namespace SC4Evolution.Mod.UI
         {
             _expanded = expanded;
             _body.isVisible = expanded;
-            _toggle.text = expanded ? "Conselho municipal −" : "Conselho municipal +";
+            _toggle.text = expanded ? GameLanguage.Text("Conselho municipal −", "City council −") : GameLanguage.Text("Conselho municipal +", "City council +");
             Layout();
         }
 
@@ -687,15 +687,15 @@ namespace SC4Evolution.Mod.UI
                 _avatars[i].isVisible = avatar != null;
                 _avatarFallbacks[i].isVisible = avatar == null;
             }
-            _name.text = briefing == null ? "Aguardando avaliação" : briefing.Name;
+            _name.text = briefing == null ? GameLanguage.Text("Aguardando avaliação", "Awaiting assessment") : briefing.Name;
             _department.text = briefing == null ? Departments[_selected] : briefing.Department;
-            _mood.text = briefing == null ? string.Empty : "Humor: " + MoodText(briefing.Mood);
-            _title.text = briefing == null ? "Sem parecer disponível" : briefing.Title;
+            _mood.text = briefing == null ? string.Empty : GameLanguage.Text("Humor: ", "Mood: ") + MoodText(briefing.Mood);
+            _title.text = briefing == null ? GameLanguage.Text("Sem parecer disponível", "No briefing available") : briefing.Title;
             _metric.text = briefing == null ? string.Empty : briefing.MetricText;
-            _message.text = briefing == null ? "O parecer será atualizado com a próxima amostra da cidade." : briefing.Message;
+            _message.text = briefing == null ? GameLanguage.Text("O parecer será atualizado com a próxima amostra da cidade.", "The briefing will update with the next city sample.") : briefing.Message;
             _message.tooltip = briefing == null ? string.Empty : briefing.Detail;
-            _action.text = _selected == (int)AdvisorId.Finance || (briefing != null && briefing.Action == AdvisorAction.Budget) ? "Abrir orçamento"
-                : briefing != null && briefing.Action == AdvisorAction.Overview ? "Ver dados da cidade" : "Abrir visualização";
+            _action.text = _selected == (int)AdvisorId.Finance || (briefing != null && briefing.Action == AdvisorAction.Budget) ? GameLanguage.Text("Abrir orçamento", "Open budget")
+                : briefing != null && briefing.Action == AdvisorAction.Overview ? GameLanguage.Text("Ver dados da cidade", "View city data") : GameLanguage.Text("Abrir visualização", "Open view");
             RefreshActionAvailability();
             RenderPortrait(briefing == null ? AdvisorMood.Calm : briefing.Mood);
         }
@@ -965,10 +965,10 @@ namespace SC4Evolution.Mod.UI
         {
             switch (mood)
             {
-                case AdvisorMood.Concerned: return "Preocupado";
-                case AdvisorMood.Angry: return "Irritado";
-                case AdvisorMood.Pleased: return "Satisfeito";
-                default: return "Tranquilo";
+                case AdvisorMood.Concerned: return GameLanguage.Text("Preocupado", "Concerned");
+                case AdvisorMood.Angry: return GameLanguage.Text("Irritado", "Angry");
+                case AdvisorMood.Pleased: return GameLanguage.Text("Satisfeito", "Pleased");
+                default: return GameLanguage.Text("Tranquilo", "Calm");
             }
         }
 
@@ -1015,12 +1015,12 @@ namespace SC4Evolution.Mod.UI
             string reason;
             bool noticeBlocked = PresentationBlocked(false, out reason);
             _readNotice.isEnabled = briefing != null && !noticeBlocked;
-            _readNotice.tooltip = briefing == null ? "Sem parecer disponível."
-                : noticeBlocked ? reason : "Ler o parecer atual deste assessor.";
+            _readNotice.tooltip = briefing == null ? GameLanguage.Text("Sem parecer disponível.", "No briefing available.")
+                : noticeBlocked ? reason : GameLanguage.Text("Ler o parecer atual deste assessor.", "Read this advisor’s current briefing.");
             _action.tooltip = _action.isEnabled ? (briefing == null ? string.Empty : briefing.Detail)
-                : !hasAction ? "Sem parecer disponível."
-                : action == AdvisorAction.Budget ? "O orçamento não está disponível neste momento."
-                : "Esta visualização não está disponível nesta cidade.";
+                : !hasAction ? GameLanguage.Text("Sem parecer disponível.", "No briefing available.")
+                : action == AdvisorAction.Budget ? GameLanguage.Text("O orçamento não está disponível neste momento.", "The budget is not available right now.")
+                : GameLanguage.Text("Esta visualização não está disponível nesta cidade.", "This view is not available in this city.");
             if (_messageView != null && _messageView.IsVisible && _messageView.Briefing != null && _messageView.ActionButton != null)
             {
                 AdvisorBriefing notice = _messageView.Briefing;

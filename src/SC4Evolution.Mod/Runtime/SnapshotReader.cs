@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using ColossalFramework;
 using SC4Evolution.Core;
+using SC4Evolution.Mod.UI;
 
 namespace SC4Evolution.Mod.Runtime
 {
@@ -21,6 +22,7 @@ namespace SC4Evolution.Mod.Runtime
             CitySnapshot snapshot = new CitySnapshot
             {
                 DataValid = true,
+                English = GameLanguage.English,
                 CityName = simulation.m_metaData == null ? "Nova cidade" : (simulation.m_metaData.m_CityName ?? "Nova cidade"),
                 SimulationDate = simulation.m_currentGameTime,
                 Population = CheckedCount(city.m_populationData.m_finalCount),

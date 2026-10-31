@@ -47,6 +47,7 @@ namespace SC4Evolution.Core
     public sealed class CitySnapshot
     {
         public bool DataValid { get; set; }
+        public bool English { get; set; }
         public string CityName { get; set; }
         public DateTime SimulationDate { get; set; }
         public int Population { get; set; }

@@ -1,42 +1,14 @@
-# Reticulating Splines — SC4Evolution
+# Roll Up Your Sleeves, Mayor! — SC4Evolution
 
-[Português](#português) · [English](#english)
-
-## Português
-
-SC4Evolution é um mod experimental para **Cities: Skylines 1** inspirado na experiência de administrar uma cidade em **SimCity 4**. A ideia é combinar a construção e o mapa amplo do CS1 com assessores, informações municipais e decisões de desenvolvimento que lembrem o SC4. É um projeto de fãs independente, não afiliado às empresas dos jogos.
-
-**Estado: beta experimental, em desenvolvimento.** Não recria integralmente a simulação do SC4. A interface e os textos dos assessores estão disponíveis em português brasileiro e inglês, conforme o idioma do jogo. Consulte [idioma e limitações](docs/LOCALIZATION.md).
-
-### O que já existe
-
-- Sete assessores integrados à interface, com retratos e avisos baseados em indicadores da cidade; episódios são acompanhados e não devem ser repetidos a cada atualização. Educação e saúde consideram o desbloqueio dos serviços.
-- Protótipos de classes residenciais, demanda e admissão de construção, incluindo política local de água. São mudanças experimentais, dependentes da configuração e de compatibilidade com a versão do jogo.
-- Financiamento cívico experimental por equipamento, com suporte limitado a escolas e equipamentos de saúde mapeados.
-- Modelos de emprego, bairros e decisões; sinais estimados de tributação e acesso são diagnósticos, não substituem a arrecadação nem o cálculo de rotas do jogo. Transporte de cargas ainda não dispõe das observações necessárias.
-- Animações dos assessores podem ser preparadas localmente a partir dos arquivos da instalação de SC4. A experiência completa e o balanceamento ainda exigem testes jogando.
-
-Os recursos originais dos jogos, executáveis, saves e builds locais não são distribuídos aqui. Os nomes e jogos pertencem aos respectivos titulares.
-
-### Preparação para desenvolvimento (Windows)
-
-Requer instalações próprias de Cities: Skylines 1 e SimCity 4, PowerShell 7, o SDK .NET indicado em `global.json` e internet para preparar dependências. Copie `config/paths.example.json` para `config/local.paths.json` e configure os caminhos locais. Na raiz do projeto:
-
-```powershell
-pwsh -File scripts/Bootstrap.ps1
-pwsh -File scripts/Prepare-LocalData.ps1
-pwsh -File scripts/Build.ps1
-pwsh -File scripts/Test.ps1
-pwsh -File scripts/Install-LocalMod.ps1
-```
-
-Ative SC4Evolution em Gerenciador de Conteúdo > Mods. O mod utiliza Cities Harmony; `Bootstrap.ps1` prepara as dependências e `scripts/Install-HarmonyDependency.ps1` oferece instalação local do provider quando necessário. Leia os scripts antes de executá-los. `config/economic-bridge.shadow-opt-in.example` documenta um preset experimental; a configuração local efetiva é `config/economic-bridge.config`. Use uma cidade de teste e faça backup de seus saves. Este repositório é código-fonte, não uma distribuição pronta do Workshop.
+[English](#english) · [Português](#português)
 
 ## English
 
-SC4Evolution is an experimental **Cities: Skylines 1** mod inspired by the city-management experience of **SimCity 4**. It aims to combine CS1's building tools and larger maps with SC4-like advisors, city information and development decisions. This is an independent fan project, unaffiliated with the games' companies.
+**Roll Up Your Sleeves, Mayor!** (SC4Evolution) is an experimental **Cities: Skylines 1** mod inspired by the city-management experience of **SimCity 4**. It aims to combine CS1's building tools and larger maps with SC4-like advisors, city information and development decisions. This is an independent fan project, unaffiliated with the games' companies.
 
 **Status: experimental beta, work in progress.** It does not yet reproduce the complete SC4 simulation. The interface and advisor messages support English and Brazilian Portuguese, following the game language. See [language behavior and limitations](docs/LOCALIZATION.md).
+
+The title echoes an introduction from the city planning advisor in SimCity 4. In the mod, advisors also speak to the mayor through notices and briefings generated from city indicators. For example, they may report a budget deficit, a shortage of school places or low traffic flow. These are the mod’s own messages, not a complete port of the original dialogue.
 
 ### Current features and limits
 
@@ -60,4 +32,36 @@ pwsh -File scripts/Test.ps1
 pwsh -File scripts/Install-LocalMod.ps1
 ```
 
-Enable SC4Evolution in Content Manager > Mods. The mod uses Cities Harmony; `Bootstrap.ps1` prepares dependencies, and `scripts/Install-HarmonyDependency.ps1` can install the local provider if needed. Read the scripts before running them. `config/economic-bridge.shadow-opt-in.example` documents an experimental preset; the effective local configuration is `config/economic-bridge.config`. Use a test city and back up saves. This is a source repository, not a ready-to-install Workshop release.
+Enable **Roll Up Your Sleeves, Mayor! — SC4Evolution** in Content Manager > Mods. The mod uses Cities Harmony; `Bootstrap.ps1` prepares dependencies, and `scripts/Install-HarmonyDependency.ps1` can install the local provider if needed. Read the scripts before running them. `config/economic-bridge.shadow-opt-in.example` documents an experimental preset; the effective local configuration is `config/economic-bridge.config`. Use a test city and back up saves. This is a source repository, not a ready-to-install Workshop release.
+
+## Português
+
+**Roll Up Your Sleeves, Mayor!** (SC4Evolution) é um mod experimental para **Cities: Skylines 1** inspirado na experiência de administrar uma cidade em **SimCity 4**. A ideia é combinar a construção e o mapa amplo do CS1 com assessores, informações municipais e decisões de desenvolvimento que lembrem o SC4. É um projeto de fãs independente, não afiliado às empresas dos jogos.
+
+**Estado: beta experimental, em desenvolvimento.** Não recria integralmente a simulação do SC4. A interface e os textos dos assessores estão disponíveis em português brasileiro e inglês, conforme o idioma do jogo. Consulte [idioma e limitações](docs/LOCALIZATION.md).
+
+O título remete à apresentação do assessor de planejamento em SimCity 4. No mod, os assessores também falam com o prefeito por meio de avisos e pareceres gerados a partir dos indicadores da cidade. Por exemplo, podem informar um déficit orçamentário, falta de vagas escolares ou fluxo de trânsito baixo. Essas mensagens são próprias do mod; o diálogo original não foi portado por completo.
+
+### O que já existe
+
+- Sete assessores integrados à interface, com retratos e avisos baseados em indicadores da cidade; episódios são acompanhados e não devem ser repetidos a cada atualização. Educação e saúde consideram o desbloqueio dos serviços.
+- Protótipos de classes residenciais, demanda e admissão de construção, incluindo política local de água. São mudanças experimentais, dependentes da configuração e de compatibilidade com a versão do jogo.
+- Financiamento cívico experimental por equipamento, com suporte limitado a escolas e equipamentos de saúde mapeados.
+- Modelos de emprego, bairros e decisões; sinais estimados de tributação e acesso são diagnósticos, não substituem a arrecadação nem o cálculo de rotas do jogo. Transporte de cargas ainda não dispõe das observações necessárias.
+- Animações dos assessores podem ser preparadas localmente a partir dos arquivos da instalação de SC4. A experiência completa e o balanceamento ainda exigem testes jogando.
+
+Os recursos originais dos jogos, executáveis, saves e builds locais não são distribuídos aqui. Os nomes e jogos pertencem aos respectivos titulares.
+
+### Preparação para desenvolvimento (Windows)
+
+Requer instalações próprias de Cities: Skylines 1 e SimCity 4, PowerShell 7, o SDK .NET indicado em `global.json` e internet para preparar dependências. Copie `config/paths.example.json` para `config/local.paths.json` e configure os caminhos locais. Na raiz do projeto:
+
+```powershell
+pwsh -File scripts/Bootstrap.ps1
+pwsh -File scripts/Prepare-LocalData.ps1
+pwsh -File scripts/Build.ps1
+pwsh -File scripts/Test.ps1
+pwsh -File scripts/Install-LocalMod.ps1
+```
+
+Ative **Roll Up Your Sleeves, Mayor! — SC4Evolution** em Gerenciador de Conteúdo > Mods. O mod utiliza Cities Harmony; `Bootstrap.ps1` prepara as dependências e `scripts/Install-HarmonyDependency.ps1` oferece instalação local do provider quando necessário. Leia os scripts antes de executá-los. `config/economic-bridge.shadow-opt-in.example` documenta um preset experimental; a configuração local efetiva é `config/economic-bridge.config`. Use uma cidade de teste e faça backup de seus saves. Este repositório é código-fonte, não uma distribuição pronta do Workshop.

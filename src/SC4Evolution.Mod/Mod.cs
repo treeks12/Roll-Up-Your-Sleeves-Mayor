@@ -7,7 +7,7 @@ namespace SC4Evolution.Mod
 {
     public sealed class Mod : IUserMod
     {
-        public string Name { get { return GameLanguage.Text("SC4Evolution — Gabinete municipal", "SC4Evolution — City Council"); } }
+        public string Name { get { return "Roll Up Your Sleeves, Mayor! — SC4Evolution"; } }
         public string Description
         {
             get { return GameLanguage.Text("Fundação da conversão: gabinete, assessores e informações reais da cidade. A conversão econômica completa está em desenvolvimento.", "An experimental city council with advisors and city data, inspired by SimCity 4. The economic conversion is in development."); }

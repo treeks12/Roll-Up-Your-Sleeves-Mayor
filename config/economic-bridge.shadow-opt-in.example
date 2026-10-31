@@ -1,0 +1,3 @@
+Stage=capacity-admission
+LocalPolicy=SC4WaterRawCapacityV1
+Gameplay=Employment,Neighborhoods,Decisions,ShadowTaxation,ShadowAccessFreight

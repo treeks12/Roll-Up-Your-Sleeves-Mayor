@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net35</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <LangVersion>7.3</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GameManagedPath>$(CitiesSkylinesPath)/Cities_Data/Managed</GameManagedPath>
+    <SimulationAssemblyPath Condition="'$(SimulationAssemblyPath)' == ''">../../src/SC4Evolution.Simulation/bin/Release/net35/SC4Evolution.Simulation.dll</SimulationAssemblyPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../src/SC4Evolution.Mod/Economy/ResidentialCapacityObserver.cs" />
+    <Compile Include="IdentityAdapter.cs" />
+    <Compile Include="Program.cs" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net35" Version="1.0.3" PrivateAssets="all" />
+    <Reference Include="SC4Evolution.Simulation"><HintPath>$(SimulationAssemblyPath)</HintPath><Private>true</Private></Reference>
+    <Reference Include="Assembly-CSharp"><HintPath>$(GameManagedPath)/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="ColossalManaged"><HintPath>$(GameManagedPath)/ColossalManaged.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(GameManagedPath)/UnityEngine.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+  <Target Name="CheckExistingReferences" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(SimulationAssemblyPath)')" Text="Existing net35 Simulation assembly unavailable; this tool does not build it or the Mod." />
+    <Error Condition="!Exists('$(GameManagedPath)/Assembly-CSharp.dll')" Text="Installed CS1 managed references unavailable; check config/local.paths.json." />
+  </Target>
+</Project>

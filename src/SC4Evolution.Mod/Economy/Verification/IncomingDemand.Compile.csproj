@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net35</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GameManagedPath>$(CitiesSkylinesPath)/Cities_Data/Managed</GameManagedPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../IncomingResidentDemandContext.cs" />
+    <Compile Include="../IncomingResidentDemandPatches.cs" />
+    <Compile Include="../EconomicDemandExtension.cs" />
+    <Compile Include="../../../../tests/SC4Evolution.IncomingDemand.Tests/TestAdapters.cs" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net35" Version="1.0.3" PrivateAssets="all" />
+    <Reference Include="Assembly-CSharp"><HintPath>$(GameManagedPath)/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="ColossalManaged"><HintPath>$(GameManagedPath)/ColossalManaged.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(GameManagedPath)/UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="CitiesHarmony.Harmony"><HintPath>../../../../tools/CitiesHarmony/provider/CitiesHarmony/CitiesHarmony.Harmony.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+  <Target Name="ExcludeGameCopies" AfterTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::Copy('%(ReferenceCopyLocalPaths.FullPath)').StartsWith('$(GameManagedPath)', System.StringComparison.OrdinalIgnoreCase))" />
+    </ItemGroup>
+  </Target>
+</Project>

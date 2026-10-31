@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/SC4Evolution.CivicFunding.Tests/SC4Evolution.CivicFunding.Tests.csproj" />
+    <Project Path="tests/SC4Evolution.CivicFundingLedger.Tests/SC4Evolution.CivicFundingLedger.Tests.csproj" />
+    <Project Path="tests/SC4Evolution.Persistence.Tests/SC4Evolution.Persistence.Tests.csproj" />
+    <Project Path="tests/SC4Evolution.RawSelection.Tests/SC4Evolution.RawSelection.Tests.csproj" />
+    <Project Path="tests/SC4Evolution.SaveRoundtripOracle.Tests/SC4Evolution.SaveRoundtripOracle.Tests.csproj" />
+  </Folder>
+  <Project Path="src/SC4Evolution.Core/SC4Evolution.Core.csproj" />
+  <Project Path="src/SC4Evolution.Mod/SC4Evolution.Mod.csproj" />
+  <Project Path="src/SC4Evolution.Simulation/SC4Evolution.Simulation.csproj" />
+  <Project Path="tests/SC4Evolution.Core.Tests/SC4Evolution.Core.Tests.csproj" />
+  <Project Path="tests/SC4Evolution.IncomingDemand.Tests/SC4Evolution.IncomingDemand.Tests.csproj" />
+  <Project Path="tests/SC4Evolution.CapacityLedger.Tests/SC4Evolution.CapacityLedger.Tests.csproj" />
+  <Project Path="tests/SC4Evolution.CapacityCodec.Tests/SC4Evolution.CapacityCodec.Tests.csproj" />
+  <Project Path="tests/SC4Evolution.ResidentialStock.Tests/SC4Evolution.ResidentialStock.Tests.csproj" />
+  <Project Path="tests/SC4Evolution.ResidentialCapacity.Tests/SC4Evolution.ResidentialCapacity.Tests.csproj" />
+  <Project Path="tests/SC4Evolution.Simulation.Tests/SC4Evolution.Simulation.Tests.csproj" />
+  <Project Path="tests/SC4TaxDemand.Tests/SC4TaxDemand.Tests.csproj" />
+  <Project Path="tests/SC4ResidentialClasses.Tests/SC4ResidentialClasses.Tests.csproj" />
+  <Project Path="tests/SC4Evolution.WaterEligibility.Tests/SC4Evolution.WaterEligibility.Tests.csproj" />
+</Solution>

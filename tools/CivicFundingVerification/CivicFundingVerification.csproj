@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net35</TargetFramework><OutputType>Exe</OutputType><LangVersion>7.3</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GameManagedPath>$(CitiesSkylinesPath)/Cities_Data/Managed</GameManagedPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../src/SC4Evolution.Mod/Civic/CivicFundingBridge.cs" />
+    <Compile Include="../../src/SC4Evolution.Mod/Civic/CivicFundingPatches.cs" />
+    <Compile Include="../../src/SC4Evolution.Simulation/CivicFundingEvaluation.cs" />
+    <Compile Include="../../src/SC4Evolution.Simulation/CivicFundingLedger.cs" />
+    <Compile Include="../../src/SC4Evolution.Simulation/CivicFundingLedgerCodec.cs" />
+    <Compile Include="Program.cs" /><Compile Include="DependencyBoundary.cs" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net35" Version="1.0.3" PrivateAssets="all" />
+    <Reference Include="Assembly-CSharp"><HintPath>$(GameManagedPath)/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="ColossalManaged"><HintPath>$(GameManagedPath)/ColossalManaged.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(GameManagedPath)/UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="CitiesHarmony.Harmony"><HintPath>../CitiesHarmony/provider/CitiesHarmony/CitiesHarmony.Harmony.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>

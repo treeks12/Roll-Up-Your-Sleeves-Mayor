@@ -1,4 +1,4 @@
-# SC4Evolution
+# SC4Evolution — SimCity 4-inspired mod for Cities: Skylines
 
 [Português](#português) · [English](#english)
 

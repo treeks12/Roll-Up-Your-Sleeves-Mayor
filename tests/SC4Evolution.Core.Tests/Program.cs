@@ -217,7 +217,11 @@ namespace SC4Evolution.Core.Tests
             report = engine.Evaluate(city);
             Equal(IssueSeverity.None, EducationHealth(report).Severity, "a locked service suspends its old episode");
             True(EducationHealth(report).IsSuspended, "a locked service marks the briefing as suspended");
+            Contains(EducationHealth(report).Title, "Serviço", "a locked school does not report an unrelated abandonment issue");
             Equal(1, report.News.Length, "locking a service does not add a recovery spam item");
+            city.English = true;
+            report = engine.Evaluate(city);
+            Contains(EducationHealth(report).Title, "Service", "the suspended service briefing is localized");
         }
 
         private static void TestEnglishAdvisorReports()

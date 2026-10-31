@@ -624,6 +624,11 @@ namespace SC4Evolution.Core
                     L("A população está abaixo do mínimo usado para avaliar o desemprego; o histórico do alerta foi preservado.", "The population is below the minimum used to assess unemployment; the alert history was preserved."),
                     L("Desemprego: não avaliado", "Unemployment: not assessed"), L("A assessoria retomará a avaliação quando a população atingir o mínimo definido.", "The advisory will resume the assessment when the population reaches the defined minimum."),
                     AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Zoning, 0);
+            else if (advisor == AdvisorId.EducationHealth)
+                briefing = NewBriefing(advisor, L("Serviço ainda não liberado", "Service not yet unlocked"),
+                    L("Este serviço ainda não está disponível; o alerta anterior permanece suspenso.", "This service is not yet available; the previous alert remains suspended."),
+                    L("Avaliação suspensa", "Assessment suspended"), L("A assessoria retomará a avaliação quando o serviço estiver disponível.", "The advisor will resume the assessment once the service is available."),
+                    AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Overview, 0);
             else briefing = NewBriefing(advisor, L("Indicador de abandono indisponível", "Unavailable abandonment indicator"),
                 L("Não há edifícios zoneados suficientes para calcular a participação de abandono.", "There are not enough zoned buildings to calculate the abandonment share."),
                 L("Abandonados: indisponível", "Abandoned: unavailable"), L("Um denominador zero não representa abandono total.", "A zero denominator does not represent total abandonment."),

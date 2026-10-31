@@ -463,7 +463,7 @@ namespace SC4Evolution.Core
                 critical ? L("Capacidade escolar muito abaixo da demanda", "School capacity far below demand") : L("Faltam vagas na rede escolar", "Lack of places in the school network"),
                 L("A demanda por ", "The demand for ") + school + L(" é de ", " is ") + need + L(" vagas; a capacidade informada é ", " places; reported capacity is ") + capacity + ".",
                 school + L(": demanda ", ": demand ") + need + L(", capacidade ", ", capacity ") + capacity,
-                L("Acompanhe a demanda escolar e planeje capacidade compatível com as necessidades informadas.", "Monitor school demand and plan capacity compatible with informed needs."), AdvisorAction.Education);
+                L("Acompanhe a demanda escolar e planeje capacidade compatível com as necessidades informadas.", "Monitor school demand and plan capacity compatible with reported needs."), AdvisorAction.Education);
         }
 
         private static Signal HealthSignal(CitySnapshot snapshot)
@@ -475,8 +475,8 @@ namespace SC4Evolution.Core
             bool critical = (long)capacity * 100L < (long)sick * 67L;
             IssueSeverity severity = critical ? IssueSeverity.Critical : IssueSeverity.Warning;
             return new Signal("health.capacity", severity,
-                critical ? L("Atendimento de saúde muito abaixo da necessidade", "Health care far below the need") : L("Atendimento de saúde em alerta", "Health care on alert"),
-                L("Há ", "There are ") + sick + L(" moradores doentes e capacidade informada para ", " sick residents and reported capacity to ") + capacity + ".",
+                critical ? L("Atendimento de saúde muito abaixo da necessidade", "Healthcare capacity far below demand") : L("Atendimento de saúde em alerta", "Health care on alert"),
+                L("Há ", "There are ") + sick + L(" moradores doentes e capacidade informada para ", " sick residents and reported capacity for ") + capacity + ".",
                 L("Moradores doentes: ", "Sick residents: ") + sick + L("; capacidade de saúde: ", "; health capacity: ") + capacity,
                 L("Acompanhe a necessidade de atendimento e planeje capacidade de saúde compatível.", "Track the need for care and plan compatible healthcare capacity."), AdvisorAction.Health);
         }
@@ -608,28 +608,28 @@ namespace SC4Evolution.Core
         private static AdvisorBriefing InvalidBriefing(AdvisorId advisor)
         {
             return NewBriefing(advisor, L("Aguardando dados da cidade", "Waiting for city data"), L("Os dados municipais ainda não estão disponíveis; nenhum alerta foi avaliado.", "Municipal data are not yet available; no alerts were evaluated."),
-                L("Dados indisponíveis", "Data unavailable"), L("Esta assessoria será atualizada quando os dados da cidade estiverem disponíveis.", "This advisory will be updated when city data is available."), AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Overview, 0);
+                L("Dados indisponíveis", "Data unavailable"), L("Esta assessoria será atualizada quando os dados da cidade estiverem disponíveis.", "This briefing will be updated when city data is available."), AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Overview, 0);
         }
 
         private static AdvisorBriefing UnavailableBriefing(AdvisorId advisor, string issueId)
         {
             AdvisorBriefing briefing;
             if (advisor == AdvisorId.Transport)
-                briefing = NewBriefing(advisor, L("Fluxo de trânsito indisponível", "Unavailable traffic flow"),
+                briefing = NewBriefing(advisor, L("Fluxo de trânsito indisponível", "Traffic flow unavailable"),
                     L("O jogo não forneceu um fluxo de trânsito válido neste levantamento; não há base para confirmar um alerta.", "The game did not provide a valid traffic flow in this survey; there is no basis for confirming an alert."),
                     L("Fluxo: indisponível", "Flow: unavailable"), L("O histórico do alerta fica preservado até que o indicador possa ser avaliado novamente.", "The alert history is preserved until the indicator can be evaluated again."),
                     AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Traffic, 0);
             else if (string.Equals(issueId, "urban.unemployment", StringComparison.Ordinal))
                 briefing = NewBriefing(advisor, L("Avaliação de desemprego suspensa", "Unemployment assessment suspended"),
                     L("A população está abaixo do mínimo usado para avaliar o desemprego; o histórico do alerta foi preservado.", "The population is below the minimum used to assess unemployment; the alert history was preserved."),
-                    L("Desemprego: não avaliado", "Unemployment: not assessed"), L("A assessoria retomará a avaliação quando a população atingir o mínimo definido.", "The advisory will resume the assessment when the population reaches the defined minimum."),
+                    L("Desemprego: não avaliado", "Unemployment: not assessed"), L("A assessoria retomará a avaliação quando a população atingir o mínimo definido.", "The advisor will resume the assessment when the population reaches the defined minimum."),
                     AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Zoning, 0);
             else if (advisor == AdvisorId.EducationHealth)
                 briefing = NewBriefing(advisor, L("Serviço ainda não liberado", "Service not yet unlocked"),
                     L("Este serviço ainda não está disponível; o alerta anterior permanece suspenso.", "This service is not yet available; the previous alert remains suspended."),
                     L("Avaliação suspensa", "Assessment suspended"), L("A assessoria retomará a avaliação quando o serviço estiver disponível.", "The advisor will resume the assessment once the service is available."),
                     AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Overview, 0);
-            else briefing = NewBriefing(advisor, L("Indicador de abandono indisponível", "Unavailable abandonment indicator"),
+            else briefing = NewBriefing(advisor, L("Indicador de abandono indisponível", "Abandonment data unavailable"),
                 L("Não há edifícios zoneados suficientes para calcular a participação de abandono.", "There are not enough zoned buildings to calculate the abandonment share."),
                 L("Abandonados: indisponível", "Abandoned: unavailable"), L("Um denominador zero não representa abandono total.", "A zero denominator does not represent total abandonment."),
                 AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Zoning, 0);
@@ -639,8 +639,8 @@ namespace SC4Evolution.Core
 
         private static AdvisorBriefing RecoveryBriefing(AdvisorId advisor, string issueId)
         {
-            return NewBriefing(advisor, L("Situação normalizada", "Normalized situation"), RecoveryText(issueId),
-                L("Sem alerta ativo", "No active alert"), L("A assessoria reconhece a recuperação uma vez e encerra este episódio.", "The advisory recognizes the recovery once and ends this episode."),
+            return NewBriefing(advisor, L("Situação normalizada", "Situation resolved"), RecoveryText(issueId),
+                L("Sem alerta ativo", "No active alert"), L("A assessoria reconhece a recuperação uma vez e encerra este episódio.", "The advisor acknowledges the recovery and closes this episode."),
                 AdvisorMood.Pleased, IssueSeverity.None, AdvisorAction.Overview, 0);
         }
 
@@ -652,7 +652,7 @@ namespace SC4Evolution.Core
             switch (advisor)
             {
                 case AdvisorId.Finance:
-                    return NewBriefing(advisor, L("Contas sem alerta", "Accounts without alert"), L("O caixa não está negativo e o saldo orçamentário informado não indica déficit.", "Cash is not negative and the reported budget balance does not indicate a deficit."),
+                    return NewBriefing(advisor, L("Contas sem alerta", "Finances: no alerts"), L("O caixa não está negativo e o saldo orçamentário informado não indica déficit.", "Cash is not negative and the reported budget balance does not indicate a deficit."),
                         L("Caixa: ", "Treasury: ") + Currency(snapshot.Cash) + L("; saldo informado: ", "; balance reported: ") + Currency(snapshot.WeeklyBalance),
                         L("Continue acompanhando as contas municipais.", "Continue monitoring municipal accounts."), AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Budget, 0);
                 case AdvisorId.UrbanPlanning:
@@ -664,40 +664,40 @@ namespace SC4Evolution.Core
                     string abandonment = snapshot.ZonedBuildings > 0
                         ? L("; abandonados: ", "; abandoned: ") + abandoned + "/" + snapshot.ZonedBuildings
                         : L("; participação de abandono indisponível", "; abandonment share unavailable");
-                    return NewBriefing(advisor, L("Desenvolvimento sem alerta", "Development without alert"), L("Os indicadores urbanos avaliados estão abaixo dos limites de alerta.", "The urban indicators evaluated are below the alert limits."),
+                    return NewBriefing(advisor, L("Desenvolvimento sem alerta", "Development: no alerts"), L("Os indicadores urbanos avaliados estão abaixo dos limites de alerta.", "The urban indicators evaluated are below the alert limits."),
                         unemployment + abandonment, L("Acompanhe a ocupação e as demandas de zoneamento.", "Track occupancy and zoning demands."),
                         AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Zoning, 0);
                 case AdvisorId.EducationHealth:
                     if (!snapshot.ElementaryEducationAvailable && !snapshot.HighSchoolEducationAvailable &&
                         !snapshot.UniversityEducationAvailable && !snapshot.HealthServiceAvailable)
-                        return NewBriefing(advisor, L("Serviços ainda não liberados", "Services not yet released"),
+                        return NewBriefing(advisor, L("Serviços ainda não liberados", "Services not yet unlocked"),
                             L("A população ainda não tem os marcos necessários para avaliar escolas ou saúde.", "The milestones needed for schools and healthcare have not been reached."),
                             L("Educação e saúde: avaliação suspensa", "Education and health: evaluation suspended"), L("A assessoria começa a cobrar esses serviços quando o jogo os liberar.", "The advisor will assess these services once they are unlocked."),
                             AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Overview, 0);
-                    return NewBriefing(advisor, L("Capacidade de serviços sem alerta", "Alert-free service capability"), L("Não há déficit de capacidade escolar ou de saúde nos dados recebidos.", "There is no deficit in school or health capacity in the data received."),
-                        L("Escolas: demanda e capacidade informadas; saúde: ", "Schools: informed demand and capacity; health: ") + snapshot.SickCitizens + L(" doentes / ", " sick / ") + snapshot.HealthCapacity + L(" de capacidade", " of capacity"),
+                    return NewBriefing(advisor, L("Capacidade de serviços sem alerta", "Service capacity: no alerts"), L("Não há déficit de capacidade escolar ou de saúde nos dados recebidos.", "There is no deficit in school or health capacity in the data received."),
+                        L("Escolas: demanda e capacidade informadas; saúde: ", "Schools: reported demand and capacity; healthcare: ") + snapshot.SickCitizens + L(" doentes / ", " sick / ") + snapshot.HealthCapacity + L(" de capacidade", " of capacity"),
                         L("Acompanhe a capacidade conforme a demanda da população.", "Monitor capacity according to population demand."), AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Overview, 0);
                 case AdvisorId.Utilities:
-                    return NewBriefing(advisor, L("Infraestrutura sem alerta", "Alert-free infrastructure"), L("O uso não excede a capacidade informada de eletricidade, água ou esgoto.", "Usage does not exceed reported electricity, water or sewer capacity."),
+                    return NewBriefing(advisor, L("Infraestrutura sem alerta", "Infrastructure: no alerts"), L("O uso não excede a capacidade informada de eletricidade, água ou esgoto.", "Usage does not exceed reported electricity, water or sewer capacity."),
                         L("Eletricidade ", "Electricity ") + snapshot.ElectricityUse + "/" + snapshot.ElectricityCapacity + L("; água ", "; water ") + snapshot.WaterUse + "/" + snapshot.WaterCapacity + L("; esgoto ", "; sewage ") + snapshot.SewageUse + "/" + snapshot.SewageCapacity,
                         L("Acompanhe o uso e a capacidade dos serviços.", "Track service usage and capacity."), AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Overview, 0);
                 case AdvisorId.PublicSafety:
-                    return NewBriefing(advisor, L("Segurança sem alerta", "Alert-free security"), L("A criminalidade está abaixo do limite de alerta do gabinete.", "Crime is below the cabinet's alert threshold."),
+                    return NewBriefing(advisor, L("Segurança sem alerta", "Public safety: no alerts"), L("A criminalidade está abaixo do limite de alerta do gabinete.", "Crime is below the cabinet's alert threshold."),
                         L("Criminalidade: ", "Crime: ") + snapshot.CrimePercent + "%", L("Continue acompanhando os indicadores de segurança.", "Continue monitoring safety indicators."),
                         AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Crime, 0);
                 case AdvisorId.Environment:
                     string garbage = snapshot.GarbageCapacity > 0
                         ? snapshot.GarbageStored + "/" + snapshot.GarbageCapacity + L(" unidades de lixo", " garbage units")
                         : snapshot.GarbageStored + L(" unidades de lixo; capacidade indisponível", " garbage units; unavailable capacity");
-                    return NewBriefing(advisor, L("Ambiente sem alerta", "Alert-free environment"), L("Poluição e armazenamento de lixo estão abaixo dos limites de alerta.", "Pollution and waste storage are below alert limits."),
+                    return NewBriefing(advisor, L("Ambiente sem alerta", "Environment: no alerts"), L("Poluição e armazenamento de lixo estão abaixo dos limites de alerta.", "Pollution and waste storage are below alert limits."),
                         L("Poluição: ", "Pollution: ") + snapshot.PollutionPercent + "%; " + garbage,
                         L("Continue acompanhando os indicadores ambientais.", "Continue monitoring environmental indicators."), AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Overview, 0);
                 case AdvisorId.Transport:
                     if (snapshot.TrafficFlowPercent >= 0 && snapshot.TrafficFlowPercent <= 100)
-                        return NewBriefing(advisor, L("Trânsito sem alerta", "Traffic without warning"), L("O fluxo de trânsito está acima dos limites de alerta.", "Traffic flow is above alert limits."),
+                        return NewBriefing(advisor, L("Trânsito sem alerta", "Traffic: no alerts"), L("O fluxo de trânsito está acima dos limites de alerta.", "Traffic flow is above alert limits."),
                             L("Fluxo: ", "Flow: ") + snapshot.TrafficFlowPercent + "%", L("Continue acompanhando os corredores da cidade.", "Continue following the city's corridors."),
                             AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Traffic, 0);
-                    return NewBriefing(advisor, L("Fluxo de trânsito indisponível", "Unavailable traffic flow"), L("O jogo não forneceu um fluxo de trânsito válido neste levantamento.", "The game did not provide a valid traffic flow in this survey."),
+                    return NewBriefing(advisor, L("Fluxo de trânsito indisponível", "Traffic flow unavailable"), L("O jogo não forneceu um fluxo de trânsito válido neste levantamento.", "The game did not provide a valid traffic flow in this survey."),
                         L("Fluxo: indisponível", "Flow: unavailable"), L("Nenhum alerta de trânsito foi avaliado sem uma medição válida.", "No traffic alert was evaluated without a valid measurement."),
                         AdvisorMood.Calm, IssueSeverity.None, AdvisorAction.Traffic, 0);
                 default:
@@ -811,14 +811,14 @@ namespace SC4Evolution.Core
         {
             switch (issueId)
             {
-                case "finance.cash-negative": return L("O caixa municipal voltou a ficar em zero ou acima.", "The municipal cash flow was back to zero or above.");
+                case "finance.cash-negative": return L("O caixa municipal voltou a ficar em zero ou acima.", "The city treasury is back to zero or above.");
                 case "finance.weekly-deficit": return L("O saldo orçamentário informado deixou de indicar déficit.", "The reported budget balance no longer indicates a deficit.");
                 case "urban.unemployment": return L("O desemprego voltou para abaixo do limite de alerta.", "Unemployment returned below the alert threshold.");
                 case "urban.abandonment": return L("A participação de edifícios abandonados voltou para abaixo do limite de alerta.", "The share of abandoned buildings has returned to below the alert threshold.");
                 case "education.elementary": return L("A capacidade informada voltou a atender a demanda do ensino fundamental.", "The reported capacity once again met the demand for elementary education.");
                 case "education.high-school": return L("A capacidade informada voltou a atender a demanda do ensino médio.", "The reported capacity once again met secondary education demand.");
                 case "education.university": return L("A capacidade informada voltou a atender a demanda do ensino superior.", "The reported capacity once again met the demand for higher education.");
-                case "health.capacity": return L("A capacidade de saúde informada voltou a atender a necessidade.", "Informed healthcare capacity has returned to meet the need.");
+                case "health.capacity": return L("A capacidade de saúde informada voltou a atender a necessidade.", "Reported healthcare capacity now meets demand.");
                 case "utilities.electricity": return L("A capacidade de eletricidade informada voltou a atender o uso.", "The reported electricity capacity returned to meet usage.");
                 case "utilities.water": return L("A capacidade de água informada voltou a atender o uso.", "The reported water capacity returned to meet usage.");
                 case "utilities.sewage": return L("A capacidade de esgoto informada voltou a atender o uso.", "The reported sewage capacity returned to meet usage.");

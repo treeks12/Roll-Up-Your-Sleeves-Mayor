@@ -465,8 +465,8 @@ namespace SC4Evolution.Mod.Diagnostics
             if (!_noticeScroll.clipChildren || !_noticeScroll.builtinKeyNavigation || _noticeScroll.scrollWheelAmount <= 0
                 || _noticeScroll.scrollWheelDirection != UIOrientation.Vertical)
                 throw new InvalidOperationException("Manual notice text lacks native scroll navigation.");
-            string mood = _noticeBriefing.Mood == AdvisorMood.Calm ? "Calmo" : _noticeBriefing.Mood == AdvisorMood.Concerned ? "Preocupado"
-                : _noticeBriefing.Mood == AdvisorMood.Angry ? "Insatisfeito" : _noticeBriefing.Mood == AdvisorMood.Pleased ? "Satisfeito" : string.Empty;
+            string mood = _noticeBriefing.Mood == AdvisorMood.Calm ? GameLanguage.Text("Calmo", "Calm") : _noticeBriefing.Mood == AdvisorMood.Concerned ? GameLanguage.Text("Preocupado", "Concerned")
+                : _noticeBriefing.Mood == AdvisorMood.Angry ? GameLanguage.Text("Insatisfeito", "Unhappy") : _noticeBriefing.Mood == AdvisorMood.Pleased ? GameLanguage.Text("Satisfeito", "Pleased") : string.Empty;
             string[] names = { "Name", "Department", "Mood", "Title", "Metric", "Body" };
             string[] expected = { _noticeBriefing.Name, _noticeBriefing.Department, mood, _noticeBriefing.Title, _noticeBriefing.MetricText, NoticeBody(_noticeBriefing) };
             for (int i = 0; i < names.Length; ++i)
@@ -712,7 +712,7 @@ namespace SC4Evolution.Mod.Diagnostics
                 }
                 ValidateNoticeCapture(false);
                 if (++_settleFrames < 4) return;
-                if (!_noticeAction.isEnabled || _noticeAction.text != "Abrir orçamento")
+                if (!_noticeAction.isEnabled || _noticeAction.text != GameLanguage.Text("Abrir orçamento", "Open budget"))
                     throw new InvalidOperationException("Finance notice budget action is unavailable.");
                 EnsureRenderPreconditions(_noticeAction);
                 RequireViewport(_noticeAction, true);
@@ -887,9 +887,9 @@ namespace SC4Evolution.Mod.Diagnostics
                 }
             }
             if (selected == null) return false;
-            string mood = selected.Mood == AdvisorMood.Concerned ? "Preocupado" : selected.Mood == AdvisorMood.Angry ? "Irritado"
-                : selected.Mood == AdvisorMood.Pleased ? "Satisfeito" : "Tranquilo";
-            string[] expected = { selected.Name, selected.Department, "Humor: " + mood, selected.Title, selected.MetricText, selected.Message };
+            string mood = selected.Mood == AdvisorMood.Concerned ? GameLanguage.Text("Preocupado", "Concerned") : selected.Mood == AdvisorMood.Angry ? GameLanguage.Text("Irritado", "Angry")
+                : selected.Mood == AdvisorMood.Pleased ? GameLanguage.Text("Satisfeito", "Pleased") : GameLanguage.Text("Tranquilo", "Calm");
+            string[] expected = { selected.Name, selected.Department, GameLanguage.Text("Humor: ", "Mood: ") + mood, selected.Title, selected.MetricText, selected.Message };
             for (int i = 0; i < expected.Length; ++i)
                 if (!string.Equals(CouncilLabel(root, AdvisorTextNames[i]).text, expected[i], StringComparison.Ordinal)) return false;
             return string.Equals(CouncilLabel(root, "Message").tooltip, selected.Detail, StringComparison.Ordinal);
@@ -910,21 +910,21 @@ namespace SC4Evolution.Mod.Diagnostics
             string[] names = { "ResidentialDemand", "CommercialDemand", "IndustryOfficeDemand" };
             uint[][] keys = { new uint[] { 0x21010, 0x21020, 0x21030 }, new uint[] { 0x23110, 0x23120, 0x23130 },
                 new uint[] { 0x23320, 0x23330, 0x24100, 0x24200, 0x24300, 0x24400 } };
-            string[][] labels = { new string[] { "R$", "R$$", "R$$$" }, new string[] { "Serviços $", "Serviços $$", "Serviços $$$" },
-                new string[] { "Escritórios $$", "Escritórios $$$", "Agricultura", "Indústria suja", "Manufatura", "Alta tecnologia" } };
+            string[][] labels = { new string[] { "R$", "R$$", "R$$$" }, new string[] { GameLanguage.Text("Serviços $", "Services $"), GameLanguage.Text("Serviços $$", "Services $$"), GameLanguage.Text("Serviços $$$", "Services $$$") },
+                new string[] { GameLanguage.Text("Escritórios $$", "Offices $$"), GameLanguage.Text("Escritórios $$$", "Offices $$$"), GameLanguage.Text("Agricultura", "Agriculture"), GameLanguage.Text("Indústria suja", "Polluting industry"), GameLanguage.Text("Manufatura", "Manufacturing"), GameLanguage.Text("Alta tecnologia", "High tech") } };
             List<string> checks = new List<string>();
             for (int i = 0; i < names.Length; ++i)
             {
                 UISlider slider = info.Find<UISlider>(names[i]);
                 if (slider == null) throw new InvalidOperationException("Existing native RCI slider missing: " + names[i]);
-                StringBuilder expected = new StringBuilder(demand.GameplayEnabled ? "\n\nDemanda por categoria" : "\n\nProjeção por categoria");
+                StringBuilder expected = new StringBuilder(demand.GameplayEnabled ? GameLanguage.Text("\n\nDemanda por categoria", "\n\nDemand by category") : GameLanguage.Text("\n\nProjeção por categoria", "\n\nProjection by category"));
                 for (int k = 0; k < keys[i].Length; ++k)
                 {
                     int value;
                     if (!demand.TryGetDemand(keys[i][k], out value)) throw new InvalidOperationException("Required RCI graph category missing.");
                     expected.Append('\n').Append(labels[i][k]).Append(": ").Append(Math.Max(-1000, Math.Min(1000, value)).ToString("+0;-0;0", CultureInfo.CurrentCulture));
                 }
-                expected.Append("\nÍndice −1000 a +1000. Valores positivos indicam procura por novas construções.");
+                expected.Append(GameLanguage.Text("\nÍndice −1000 a +1000. Valores positivos indicam procura por novas construções.", "\nIndex −1000 to +1000. Positive values indicate demand for new buildings."));
                 if (slider.tooltip == null || !slider.tooltip.EndsWith(expected.ToString(), StringComparison.Ordinal)) return false;
                 checks.Add("{\"nativeSlider\":" + Json(names[i]) + ",\"categoryValuesMatch\":true,\"ownedSuffix\":" + Json(expected.ToString()) + "}");
             }

@@ -17,6 +17,7 @@ namespace SC4Evolution.Core.Tests
                 TestThresholdsAndSafeFinanceMath();
                 TestLockedServicesDoNotAlert();
                 TestEnglishAdvisorReports();
+                TestEnglishIssueCoverage();
                 TestSameDayAndSevenDayEscalation();
                 TestRecoveryAndReturningIssue();
                 TestZeroPopulationPreservesIssueHistory();
@@ -28,7 +29,7 @@ namespace SC4Evolution.Core.Tests
                 TestSerializationRoundTripAndReload();
                 TestInvalidSerializationDoesNotReplaceState();
                 TestNewsHistoryBound();
-                Console.WriteLine("PASS: " + _assertions + " assertions across 16 advisor-engine scenarios.");
+                Console.WriteLine("PASS: " + _assertions + " assertions across 17 advisor-engine scenarios.");
                 Console.WriteLine("PASS: " + AdvisorAlertQueueTests.Run() + " assertions across 13 advisor-alert queue scenarios.");
                 return 0;
             }
@@ -250,6 +251,55 @@ namespace SC4Evolution.Core.Tests
             city.English = false;
             report = engine.Evaluate(city);
             Contains(EducationHealth(report).Message, "ensino fundamental", "Portuguese remains available after English");
+        }
+
+        private static void TestEnglishIssueCoverage()
+        {
+            AdvisorId[] advisors = { AdvisorId.Finance, AdvisorId.Finance, AdvisorId.UrbanPlanning, AdvisorId.UrbanPlanning,
+                AdvisorId.EducationHealth, AdvisorId.EducationHealth, AdvisorId.EducationHealth, AdvisorId.EducationHealth,
+                AdvisorId.Utilities, AdvisorId.Utilities, AdvisorId.Utilities, AdvisorId.PublicSafety,
+                AdvisorId.Environment, AdvisorId.Environment, AdvisorId.Transport };
+            string[] expected = { "treasury", "deficit", "unemployment", "abandonment", "school", "school", "school", "Health",
+                "electricity", "water", "sewage", "crime", "pollution", "storage", "traffic" };
+            for (int i = 0; i < advisors.Length; i++)
+            {
+                CitySnapshot city = Good(Date(2026, 3, 1));
+                switch (i)
+                {
+                    case 0: city.Cash = -100; break;
+                    case 1: city.WeeklyBalance = -100; break;
+                    case 2: city.UnemploymentPercent = 25; break;
+                    case 3: city.ZonedBuildings = 100; city.ResidentialAbandoned = 20; break;
+                    case 4: city.ElementaryNeed = 100; break;
+                    case 5: city.HighSchoolNeed = 100; break;
+                    case 6: city.UniversityNeed = 100; break;
+                    case 7: city.SickCitizens = 100; break;
+                    case 8: city.ElectricityUse = 100; break;
+                    case 9: city.WaterUse = 100; break;
+                    case 10: city.SewageUse = 100; break;
+                    case 11: city.CrimePercent = 25; break;
+                    case 12: city.PollutionPercent = 40; break;
+                    case 13: city.GarbageStored = 100; city.GarbageCapacity = 100; break;
+                    case 14: city.TrafficFlowPercent = 20; break;
+                }
+                city.English = true;
+                AdvisorEngine english = new AdvisorEngine();
+                CabinetReport en = english.Evaluate(city);
+                AdvisorBriefing briefing = en.Briefings[(int)advisors[i]];
+                True(briefing.Title.IndexOf(expected[i], StringComparison.OrdinalIgnoreCase) >= 0,
+                    "English title for issue " + i + ": " + briefing.Title);
+                True(briefing.Severity >= IssueSeverity.Warning, "English issue is active " + i);
+                Contains(en.News[0].Title, "Alert:", "English news for issue " + i);
+                city.English = false;
+                AdvisorBriefing pt = new AdvisorEngine().Evaluate(city).Briefings[(int)advisors[i]];
+                Equal(pt.Severity, briefing.Severity, "locale does not change severity " + i);
+                Equal(pt.Action, briefing.Action, "locale does not change action " + i);
+                CitySnapshot recovered = Good(Date(2026, 3, 2));
+                recovered.English = true;
+                recovered.ZonedBuildings = 100;
+                CabinetReport recovery = english.Evaluate(recovered);
+                Contains(recovery.News[recovery.News.Length - 1].Title, "Recovery:", "English recovery for issue " + i);
+            }
         }
 
         private static void TestSameDayAndSevenDayEscalation()

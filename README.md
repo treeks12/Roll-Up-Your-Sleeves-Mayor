@@ -1,4 +1,4 @@
-# SC4Evolution — SimCity 4-inspired mod for Cities: Skylines
+# Reticulating Splines — SC4Evolution
 
 [Português](#português) · [English](#english)
 

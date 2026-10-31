@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using SC4Evolution.Core;
+using SC4Evolution.Core.Decisions;
 
 namespace SC4Evolution.Core.Tests
 {
@@ -18,6 +19,7 @@ namespace SC4Evolution.Core.Tests
                 TestLockedServicesDoNotAlert();
                 TestEnglishAdvisorReports();
                 TestEnglishIssueCoverage();
+                TestGameplayDecisionLocalization();
                 TestSameDayAndSevenDayEscalation();
                 TestRecoveryAndReturningIssue();
                 TestZeroPopulationPreservesIssueHistory();
@@ -29,7 +31,7 @@ namespace SC4Evolution.Core.Tests
                 TestSerializationRoundTripAndReload();
                 TestInvalidSerializationDoesNotReplaceState();
                 TestNewsHistoryBound();
-                Console.WriteLine("PASS: " + _assertions + " assertions across 17 advisor-engine scenarios.");
+                Console.WriteLine("PASS: " + _assertions + " assertions across 18 advisor-engine scenarios.");
                 Console.WriteLine("PASS: " + AdvisorAlertQueueTests.Run() + " assertions across 13 advisor-alert queue scenarios.");
                 return 0;
             }
@@ -300,6 +302,25 @@ namespace SC4Evolution.Core.Tests
                 CabinetReport recovery = english.Evaluate(recovered);
                 Contains(recovery.News[recovery.News.Length - 1].Title, "Recovery:", "English recovery for issue " + i);
             }
+        }
+
+        private static void TestGameplayDecisionLocalization()
+        {
+            string[] actions = { "Address abandoned buildings", "Review the municipal budget", "Expand health services",
+                "Improve transport connections", "Expand employment opportunities", "Improve aggregate access", "Review the shadow budget" };
+            string[] labels = { "abandonedBuildings", "weeklyBalance", "sickCitizens", "trafficFlowPercent", "unemploymentPercent", "shadowAccessPressure", "shadowFiscalPressure" };
+            string[] english = { "Abandoned buildings", "Weekly balance", "Sick residents", "Traffic flow (%)", "Unemployment (%)", "Estimated access pressure", "Estimated fiscal pressure" };
+            string[] portuguese = { "Edifícios abandonados", "Saldo semanal", "Moradores doentes", "Fluxo de trânsito (%)", "Desemprego (%)", "Pressão estimada de acesso", "Pressão fiscal estimada" };
+            for (int i = 0; i < actions.Length; i++)
+            {
+                string expectedAction = i == 5 ? "Improve access to jobs" : i == 6 ? "Review the estimated budget" : actions[i];
+                Equal(expectedAction, DecisionNoticeText.Action(actions[i], true), "English action remains readable " + i);
+                True(DecisionNoticeText.Action(actions[i], false) != actions[i], "Portuguese action is translated " + i);
+                Equal(english[i] + ": 42 → 10", DecisionNoticeText.Indicator(labels[i] + ": 42 → 10", true), "English indicator label " + i);
+                Equal(portuguese[i] + ": 42 → 10", DecisionNoticeText.Indicator(labels[i] + ": 42 → 10", false), "Portuguese indicator label " + i);
+            }
+            Equal("Other mod: 1 → 2", DecisionNoticeText.Indicator("Other mod: 1 → 2", true), "unknown indicator retained");
+            Equal("Other advice", DecisionNoticeText.Action("Other advice", false), "unknown action retained");
         }
 
         private static void TestSameDayAndSevenDayEscalation()
